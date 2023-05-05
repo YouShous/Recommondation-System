@@ -77,7 +77,7 @@ class Matrix_Factorization(object):
 
         epoch_num = 1
         while epoch_num <= self.epoch:
-            for index in xrange(0, self.length):
+            for index in range(0, self.length):
 
                 r_i, r_j, p_i, q_j, descent_p_i, descent_q_j = self._comp_descent(index)
                 p_i_new, q_j_new = self._update(p_i, q_j, descent_p_i, descent_q_j)
@@ -88,7 +88,7 @@ class Matrix_Factorization(object):
             r_hat = self._estimate_r_hat()
             e = r_hat - self.r
             error = e.dot(e)
-            print 'The error is %s=================Epoch:%s' %(error, epoch_num)
+            print('The error is %s=================Epoch:%s' %(error, epoch_num))
             epoch_num += 1
 
         R_hat = self.P.dot(self.Q.T)
@@ -97,8 +97,8 @@ class Matrix_Factorization(object):
 
 if __name__ == '__main__':
 
-    user_rating = pd.read_csv('../data/Moivelens/ml-latest-small/user-rating.csv', index_col=0)
+    user_rating = pd.read_csv('../../data/Movielens/ml-latest-small/user-rating.csv', index_col=0)
 
-    aa = Matrix_Factorization(K = 5)
+    aa = Matrix_Factorization(K=5)
     aa.fit(user_rating)
     aa.start()

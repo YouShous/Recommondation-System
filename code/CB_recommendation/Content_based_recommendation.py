@@ -45,8 +45,8 @@ def comp_user_feature(user_rated_vector, item_feature_matrix):
     user_like_item = user_rated_vector.loc[user_rated_vector >= user_rating_mean]
     user_unlike_item = user_rated_vector.loc[user_rated_vector < user_rating_mean]
 
-    user_like_item_index = map(int, user_like_item.index.values)
-    user_unlike_item_index = map(int, user_unlike_item.index.values)
+    user_like_item_index = list(map(int, user_like_item.index.values))
+    user_unlike_item_index = list(map(int, user_unlike_item.index.values))
 
     user_like_item_rating = np.matrix(user_like_item.values)
     user_unlike_item_rating = np.matrix(user_unlike_item.values)
@@ -86,7 +86,7 @@ def CB_recommend_estimate(user_feature, item_feature_matrix, item):
 
     #某一用户已有评分item的评分向量和引索以及item的评分矩阵
     user_rated_vector = np.matrix(user_feature.loc[user_feature > 0].values)
-    user_rated_items = map(int, user_item_index[user_feature > 0].values)
+    user_rated_items = list(map(int, user_item_index[user_feature > 0].values))
     user_rated_items_matrix = np.matrix(item_feature_matrix.loc[user_rated_items, :].values)
 
 
@@ -116,7 +116,7 @@ def CB_recommend_top_K(user_feature, item_feature_matrix, K):
     user_unrated_vector = user_feature.loc[user_feature == 0]
 
     #未评分item的特征矩阵
-    user_unrated_item_index = map(int, user_unrated_vector.index.values)
+    user_unrated_item_index = list(map(int, user_unrated_vector.index.values))
     user_unrated_item_feature_matrix = np.matrix(item_feature_matrix.loc[user_unrated_item_index, :].values)
 
     #user喜好总特征
@@ -132,8 +132,8 @@ def CB_recommend_top_K(user_feature, item_feature_matrix, K):
 
 
 if __name__ == '__main__':
-    movies_feature = pd.read_csv('../data/Moivelens/ml-latest-small/movies_feature.csv', index_col=0)
-    user_rating = pd.read_csv('../data/Moivelens/ml-latest-small/user-rating.csv', index_col=0)
+    movies_feature = pd.read_csv('../../data/Movielens/ml-latest-small/movies_feature.csv', index_col=0)
+    user_rating = pd.read_csv('../../data/Movielens/ml-latest-small/user-rating.csv', index_col=0)
     user_feature = user_rating.loc[100,:]
-    print CB_recommend_estimate(user_feature, movies_feature, 10)
-    print CB_recommend_top_K(user_feature, movies_feature, 10)
+    print(CB_recommend_estimate(user_feature, movies_feature, 10))
+    print(CB_recommend_top_K(user_feature, movies_feature, 10))

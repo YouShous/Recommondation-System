@@ -5,7 +5,22 @@
 
 import numpy as np
 import pandas as pd
-from measure import measure_method
+
+
+def cos_measure(feature_vector, feature_matrix):
+    """
+    计算item之间的余弦夹角相似度
+    :param feature_vector: 待测量的item特征向量
+    :param feature_matrix: 用户已评分的items的特征矩阵
+    :return: 待计算item与用户已评分的items的余弦夹角相识度的向量
+    """
+    x_c = (feature_vector * feature_matrix.T) + 0.0000001
+    mod_x = np.sqrt(feature_vector * feature_vector.T)
+    mod_c = np.sqrt((feature_matrix * feature_matrix.T).diagonal())
+    cos_xc = x_c / (mod_x * mod_c)
+
+    return cos_xc
+
 
 
 def user_similarity(user_rating, user):
@@ -23,7 +38,7 @@ def user_similarity(user_rating, user):
     user_rating_matrix = np.matrix(user_rating)
 
     #使用余弦夹角作为度量标准计算相似度
-    similarity_uu = np.array(measure_method.cos_measure(user_rating_feature, user_rating_matrix))[0]
+    similarity_uu = np.array(cos_measure(user_rating_feature, user_rating_matrix))[0]
     similarity_uu_df = pd.Series(similarity_uu, index=user_index).drop(user)
 
     return similarity_uu_df
@@ -97,8 +112,8 @@ def CF_recommend_estimate(user_rating, user, item_lst, K):
 
 if __name__ == '__main__':
 
-    movies_feature = pd.read_csv('../data/Moivelens/ml-latest-small/movies_feature.csv', index_col=0)
-    user_rating = pd.read_csv('../data/Moivelens/ml-latest-small/user-rating.csv', index_col=0)
+    movies_feature = pd.read_csv('../data/Movielens/ml-latest-small/movies_feature.csv', index_col=0)
+    user_rating = pd.read_csv('../data/Movielens/ml-latest-small/user-rating.csv', index_col=0)
 
-    print CF_recommend_estimate(user_rating, 1, [10, 17], 50)
+    print(CF_recommend_estimate(user_rating, 1, [10, 17], 50))
 
